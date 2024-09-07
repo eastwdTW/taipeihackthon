@@ -68,7 +68,11 @@ export const driverForgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
   axios.post("", forgetPasswordDto); /* /api/driver/forget-password */
 
 export const getAllCar = (query: GetAllCar) =>
-  axios.get("" /* /api/available/car  */, { params: query });
+  axios.get("/api/available/car", { params: query });
 
 export const reserveCar = (reserveCarDto: ReserveCarDto) =>
-  axios.post("" /* /api/select/car  */, reserveCarDto);
+  axios.post("/api/reserve", qs.stringify(reserveCarDto), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });

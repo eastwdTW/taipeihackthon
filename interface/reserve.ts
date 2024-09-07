@@ -16,7 +16,8 @@ export interface ReserveCarDto {
   startDate: string;
   from: string;
   to: string;
-  driverId: number;
+  carType: CarType;
+  customerid: string;
 }
 
 export enum CarType {

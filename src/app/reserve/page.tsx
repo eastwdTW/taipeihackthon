@@ -9,7 +9,6 @@ import {
   Select,
   message,
   Modal,
-  Card,
   Flex,
   Popconfirm,
 } from "antd";
@@ -22,6 +21,7 @@ import { AvailableCarDto, CarType } from "../../../interface/reserve";
 import { useRequest, useToggle } from "ahooks";
 import Footer from "../footer";
 import Header from "../header";
+import { useRouter } from "next/navigation";
 
 interface ResultModalProps {
   open: boolean;
@@ -42,7 +42,13 @@ const ResultModal = ({
   availableCar,
   clientSelectCar,
 }: ResultModalProps) => {
+  const router = useRouter();
   const [selectCar, setSelectCar] = useState<number>(-1);
+
+  const handleCloseModal = () => {
+    setSelectCar(-1);
+    onClose();
+  };
 
   const handleSelectCar = (index: number) => {
     setSelectCar(index);
@@ -50,10 +56,11 @@ const ResultModal = ({
 
   const handleConfirm = () => {
     run({
-      startDate: dayjs(clientSelectCar.startDate).toISOString(),
+      startDate: dayjs(clientSelectCar.startDate).format("YYYY/MM/DD HH:mm:ss"),
       from: clientSelectCar.from,
       to: clientSelectCar.to,
-      driverId: availableCar[selectCar].driverId,
+      customerid: window.localStorage.getItem("_token") as string,
+      carType: availableCar[selectCar].carType,
     });
   };
 
@@ -61,7 +68,8 @@ const ResultModal = ({
     manual: true,
     onSuccess: () => {
       message.success("預約成功");
-      onClose();
+      handleCloseModal();
+      router.push("/history");
     },
     onError: () => {
       message.error("預約失敗");
@@ -71,10 +79,14 @@ const ResultModal = ({
   return (
     <Modal
       open={open}
-      onCancel={onClose}
+      onCancel={handleCloseModal}
       title="搜尋結果"
       footer={[
-        <Button key="cancel" onClick={onClose} style={{ marginRight: "10px" }}>
+        <Button
+          key="cancel"
+          onClick={handleCloseModal}
+          style={{ marginRight: "10px" }}
+        >
           返回
         </Button>,
         <Popconfirm
@@ -133,32 +145,6 @@ export default function MainPage() {
     return current && current < dayjs().startOf("day");
   };
 
-  const disabledDateTime = () => {
-    const current = dayjs();
-    return {
-      disabledHours: () => {
-        const hours = [];
-        for (let i = 0; i < 24; i++) {
-          if (i < current.hour()) {
-            hours.push(i);
-          }
-        }
-        return hours;
-      },
-      disabledMinutes: (selectedHour: number) => {
-        const minutes = [];
-        if (selectedHour === current.hour()) {
-          for (let i = 0; i < 60; i++) {
-            if (i < current.minute()) {
-              minutes.push(i);
-            }
-          }
-        }
-        return minutes;
-      },
-    };
-  };
-
   const handleSearch = () => {
     form.validateFields().then((values) => {
       run(values);
@@ -167,69 +153,8 @@ export default function MainPage() {
 
   const { run } = useRequest(getAllCar, {
     manual: true,
-    onSuccess: () => {
-      setAvailableCar([
-        {
-          driverId: 1,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "10 minutes",
-          price: 129.63,
-        },
-        {
-          driverId: 2,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "15 minutes",
-          price: 50.05,
-        },
-        {
-          driverId: 3,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "20 minutes",
-          price: 86.83,
-        },
-        {
-          driverId: 4,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "10 minutes",
-          price: 68.07,
-        },
-        {
-          driverId: 5,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "30 minutes",
-          price: 70.65,
-        },
-        {
-          driverId: 6,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "10 minutes",
-          price: 71.64,
-        },
-        {
-          driverId: 7,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "1 hour",
-          price: 31.09,
-        },
-        {
-          driverId: 8,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "15 minutes",
-          price: 108.72,
-        },
-        {
-          driverId: 9,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "30 minutes",
-          price: 74.14,
-        },
-        {
-          driverId: 10,
-          carType: CarType["銀髮族運輸服務"],
-          waitingTime: "1 hour",
-          price: 140.38,
-        },
-      ]);
+    onSuccess: ({ data }) => {
+      setAvailableCar(data);
       toggleResultModal();
     },
     onError: () => {
@@ -383,7 +308,6 @@ export default function MainPage() {
                 showTime={{ format: "HH:mm" }}
                 format={"YYYY-MM-DD HH:mm"}
                 disabledDate={disabledDate}
-                disabledTime={disabledDateTime}
               />
             </Form.Item>
           </Form>
