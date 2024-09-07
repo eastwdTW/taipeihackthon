@@ -24,6 +24,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { regist } from "../../../api/api";
+import { encryptWithPublicKey } from "../../../utils/util";
 
 export default function Regist() {
   const [form] = Form.useForm();
@@ -37,7 +38,7 @@ export default function Regist() {
 
   const handleRegister = () => {
     form.validateFields().then((values) => {
-      const { file, ...otherFields } = values;
+      const { file, password, ...otherFields } = values;
 
       const formData = new FormData();
 
@@ -48,6 +49,8 @@ export default function Regist() {
       Object.keys(otherFields).map((fieldName) => {
         formData.append(fieldName, values[fieldName]);
       });
+
+      formData.append("password", encryptWithPublicKey(password));
 
       run(formData);
     });

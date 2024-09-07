@@ -59,7 +59,7 @@ export default function MainPage() {
       </Row>
       <div style={{ padding: "0 48px" }}>
         <Image
-          src="/logo.svg"
+          src="/bus.png"
           width="100px"
           preview={false}
           style={{ marginTop: "10px" }}

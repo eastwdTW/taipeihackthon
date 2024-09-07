@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { login } from "../../../api/api";
+import { encryptWithPublicKey } from "../../../utils/util";
 
 export default function Login() {
   const router = useRouter();
@@ -25,7 +26,9 @@ export default function Login() {
 
   const handleLogin = () => {
     form.validateFields().then((values) => {
-      run(values);
+      const { account, password } = values;
+      const encryptPassword = encryptWithPublicKey(password);
+      run({ account, password: encryptPassword });
     });
   };
 
