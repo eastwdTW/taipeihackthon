@@ -275,7 +275,7 @@ export default function MainPage() {
                   lineHeight: "45px",
                 }}
                 suffixIcon={<CarOutlined />}
-                placeholder={"請輸入車種"}
+                placeholder={"請選擇車種"}
                 className="custom-placeholder"
                 options={Object.keys(CarType).map((type) => {
                   return {

@@ -24,7 +24,7 @@ export default function DriverForgetPassword() {
     manual: true,
     onSuccess: () => {
       message.success("已寄送重設密碼至您的信箱");
-      router.push("/login");
+      router.push("/driver/login");
     },
     onError: () => {
       message.error("寄送重設密碼信件失敗");

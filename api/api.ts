@@ -62,13 +62,25 @@ export const getCustomerHistory = (customerId: string) =>
 export const getAnnouncement = () => axios.get("/api/announcement");
 
 export const driverLogin = (loginDto: LoginDto) =>
-  axios.post("", loginDto); /* /api/driver/login */
+  axios.post("/api/driver/login", qs.stringify(loginDto), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
 
 export const driverRegist = (registDto: FormData) =>
-  axios.post("", registDto); /* /api/driver/regist */
+  axios.post("/api/driver/regist ", qs.stringify(registDto), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
 
 export const driverForgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
-  axios.post("", forgetPasswordDto); /* /api/driver/forget-password */
+  axios.post("/api/driver/forget-password", qs.stringify(forgetPasswordDto), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
 
 export const getAllCar = (query: GetAllCar) =>
   axios.get("/api/available/car", { params: query });

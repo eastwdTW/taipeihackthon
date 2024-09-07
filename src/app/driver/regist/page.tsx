@@ -1,5 +1,15 @@
 "use client";
-import { Button, Card, Col, Flex, Form, Input, message, Row } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Flex,
+  Form,
+  Input,
+  message,
+  Row,
+  Select,
+} from "antd";
 import {
   AuditOutlined,
   CarOutlined,
@@ -15,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { encryptWithPublicKey } from "../../../../utils/util";
 import { driverRegist } from "../../../../api/api";
+import { CarType } from "../../../../interface/reserve";
 
 export default function DriverRegist() {
   const [form] = Form.useForm();
@@ -26,17 +37,8 @@ export default function DriverRegist() {
 
   const handleRegister = () => {
     form.validateFields().then((values) => {
-      const { file, password, ...otherFields } = values;
-
-      const formData = new FormData();
-
-      Object.keys(otherFields).map((fieldName) => {
-        formData.append(fieldName, values[fieldName]);
-      });
-
-      formData.append("password", encryptWithPublicKey(password));
-
-      run(formData);
+      const encryptPassword = encryptWithPublicKey(values.password);
+      run({ ...values, password: encryptPassword });
     });
   };
 
@@ -44,7 +46,7 @@ export default function DriverRegist() {
     manual: true,
     onSuccess: () => {
       message.success("註冊成功");
-      router.push("/login");
+      router.push("/driver/login");
     },
     onError: () => {
       message.error("註冊失敗");
@@ -180,7 +182,27 @@ export default function DriverRegist() {
                 <Input prefix={<PhoneOutlined />} placeholder={"請輸入手機"} />
               </Form.Item>
               <Form.Item
-                name="plateNumber"
+                name="carType"
+                rules={[
+                  {
+                    required: true,
+                    message: "請選擇車種",
+                  },
+                ]}
+              >
+                <Select
+                  suffixIcon={<CarOutlined />}
+                  placeholder={"請選擇車種"}
+                  options={Object.keys(CarType).map((type) => {
+                    return {
+                      value: type,
+                      label: type,
+                    };
+                  })}
+                />
+              </Form.Item>
+              <Form.Item
+                name="plate"
                 rules={[
                   {
                     required: true,
