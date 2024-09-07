@@ -37,7 +37,11 @@ export const login = (loginDto: LoginDto) =>
   });
 
 export const forgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
-  axios.post("", forgetPasswordDto); /* /api/forget-password */
+  axios.post("/api/user/forget-password ", qs.stringify(forgetPasswordDto), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
 
 export const driverLogin = (loginDto: LoginDto) =>
   axios.post("", loginDto); /* /api/driver/login */

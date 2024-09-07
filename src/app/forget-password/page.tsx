@@ -6,6 +6,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { forgetPassword } from "../../../api/api";
+import { AxiosError } from "axios";
 
 export default function ForgetPassword() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function ForgetPassword() {
 
   const handleForgetPassword = () => {
     form.validateFields().then((values) => {
-      run(values);
+      run({ account: values.account, email: values.email });
     });
   };
 
@@ -27,8 +28,15 @@ export default function ForgetPassword() {
       message.success("已寄送重設密碼至您的信箱");
       router.push("/login");
     },
-    onError: () => {
-      message.error("寄送重設密碼信件失敗");
+    onError: (error) => {
+      const axiosError = error as AxiosError;
+      let errorMessage = "";
+      if (axiosError.response?.status === 404) {
+        errorMessage = "帳號或信箱錯誤";
+      } else {
+        errorMessage = "伺服器發生錯誤";
+      }
+      message.error(`寄送重設密碼信件失敗：${errorMessage}`);
     },
   });
 
@@ -45,7 +53,11 @@ export default function ForgetPassword() {
             color: "#fff",
           },
         }}
-        style={{ width: "80%", border: "2px solid #5bb3c4", borderRadius: "10px" }}
+        style={{
+          width: "80%",
+          border: "2px solid #5bb3c4",
+          borderRadius: "10px",
+        }}
         title={<span>台北市復康巴士 - 忘記密碼</span>}
       >
         <Row>
@@ -89,11 +101,14 @@ export default function ForgetPassword() {
                 <Button onClick={handleLogin} style={{ marginRight: "5px" }}>
                   返回登入
                 </Button>
-                <Button style={{
-                  backgroundColor: "#5bb3c4",
-                  color: "#fff",
-                  border: "none"
-                }} onClick={handleForgetPassword}>
+                <Button
+                  style={{
+                    backgroundColor: "#5bb3c4",
+                    color: "#fff",
+                    border: "none",
+                  }}
+                  onClick={handleForgetPassword}
+                >
                   送出
                 </Button>
               </div>
