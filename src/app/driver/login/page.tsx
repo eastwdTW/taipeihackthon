@@ -24,6 +24,10 @@ export default function DriverLogin() {
     router.push("/driver/regist");
   };
 
+  const handleCustomerLogin = () => {
+    router.push("/login");
+  };
+
   const handleLogin = () => {
     form.validateFields().then((values) => {
       const { account, password } = values;
@@ -113,6 +117,17 @@ export default function DriverLogin() {
                   登入
                 </Button>
               </div>
+            </Flex>
+          </Col>
+          <Col span={24}>
+            <Flex justify={"end"} align={"center"}>
+              <Button
+                type={"link"}
+                style={{ padding: 0 }}
+                onClick={handleCustomerLogin}
+              >
+                我是乘客，按我登入
+              </Button>
             </Flex>
           </Col>
         </Row>
