@@ -89,7 +89,11 @@ export default function ForgetPassword() {
                 <Button onClick={handleLogin} style={{ marginRight: "5px" }}>
                   返回登入
                 </Button>
-                <Button type="primary" onClick={handleForgetPassword}>
+                <Button style={{
+                  backgroundColor: "#5bb3c4",
+                  color: "#fff",
+                  border: "none"
+                }} onClick={handleForgetPassword}>
                   送出
                 </Button>
               </div>

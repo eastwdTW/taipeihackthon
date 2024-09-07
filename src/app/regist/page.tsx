@@ -231,7 +231,11 @@ export default function Regist() {
                 >
                   返回登入
                 </Button>
-                <Button type="primary" onClick={handleRegister}>
+                <Button style={{
+                  backgroundColor: "#5bb3c4",
+                  color: "#fff"
+                }}
+                  onClick={handleRegister}>
                   註冊
                 </Button>
               </div>

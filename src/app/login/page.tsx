@@ -105,7 +105,12 @@ export default function Login() {
                 <Button onClick={handleRegister} style={{ marginRight: "5px" }}>
                   註冊
                 </Button>
-                <Button type="primary" onClick={handleLogin}>
+                <Button style={{
+                  backgroundColor: "#5bb3c4",
+                  color: "#fff",
+                  border: "none",
+                }}
+                  onClick={handleLogin}>
                   登入
                 </Button>
               </div>
