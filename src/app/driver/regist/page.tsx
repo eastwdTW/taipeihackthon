@@ -2,6 +2,7 @@
 import { Button, Card, Col, Flex, Form, Input, message, Row } from "antd";
 import {
   AuditOutlined,
+  CarOutlined,
   EyeInvisibleOutlined,
   EyeTwoTone,
   MailOutlined,
@@ -177,6 +178,49 @@ export default function DriverRegist() {
                 ]}
               >
                 <Input prefix={<PhoneOutlined />} placeholder={"請輸入手機"} />
+              </Form.Item>
+              <Form.Item
+                name="plateNumber"
+                rules={[
+                  {
+                    required: true,
+                    message: "請輸入車牌號碼",
+                  },
+                  {
+                    validator: (_, value) => {
+                      const regex = /^[臨試使外軍]?[A-Z0-9]+-?[A-Z0-9]+$/;
+
+                      if (value.length < 5 || !regex.test(value)) {
+                        return Promise.reject("車牌號碼格式錯誤");
+                      }
+                      return Promise.resolve();
+                    },
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<CarOutlined />}
+                  placeholder={"請輸入車牌號碼"}
+                  onChange={(v) => {
+                    let value = v.target.value;
+
+                    if (
+                      value.length === 4 &&
+                      value.indexOf("-") === -1 &&
+                      /^[a-zA-Z]{3}$/.test(value.slice(0, 3))
+                    ) {
+                      value = `${value.slice(0, 3)}-${value[3]}`;
+                    }
+
+                    const allUpperCase = value.toUpperCase();
+
+                    form.setFieldsValue({
+                      plateNumber: allUpperCase,
+                    });
+
+                    form.validateFields(["plateNumber"]);
+                  }}
+                />
               </Form.Item>
               <Form.Item
                 name="driverIdentificationCode"
