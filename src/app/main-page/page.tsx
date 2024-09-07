@@ -1,11 +1,22 @@
 "use client";
-import { Layout, Button, Row, Col, Flex } from "antd";
+import {
+  Layout,
+  Button,
+  Row,
+  Col,
+  Flex,
+  Modal,
+  Form,
+  Input,
+  message,
+} from "antd";
 import { useState } from "react";
 import { getAnnouncement, tryGetToken } from "../../../api/api";
 import { useRouter } from "next/navigation";
 import Footer from "../footer";
 import Header from "../header";
-import { useRequest } from "ahooks";
+import { useRequest, useToggle } from "ahooks";
+import { useForm } from "antd/lib/form/Form";
 
 interface Announcement {
   id: number;
@@ -14,9 +25,63 @@ interface Announcement {
   date: string;
 }
 
+interface ContactModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const ContactModal = ({ open, onClose }: ContactModalProps) => {
+  const [form] = useForm();
+
+  const handleOnClose = () => {
+    form.resetFields();
+    onClose();
+  };
+
+  const send = () => {
+    form.validateFields().then((values) => {
+      message.success("傳送成功，我們將盡快聯繫您！");
+      handleOnClose();
+    });
+  };
+
+  return (
+    <Modal
+      open={open}
+      onCancel={handleOnClose}
+      title="聯絡我們"
+      footer={[
+        <Button onClick={handleOnClose}>關閉</Button>,
+        <Button type="primary" onClick={send}>
+          送出
+        </Button>,
+      ]}
+    >
+      <Form form={form} style={{ marginTop: "30px" }}>
+        <Form.Item
+          name="email"
+          rules={[
+            { required: true, message: "請填寫信箱" },
+            { type: "email", message: "信箱格式錯誤" },
+          ]}
+        >
+          <Input placeholder="請輸入信箱" />
+        </Form.Item>
+        <Form.Item
+          name="content"
+          rules={[{ required: true, message: "請填寫事項" }]}
+        >
+          <Input.TextArea rows={6} placeholder="請輸入事項" />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
 export default function MainPage() {
   const router = useRouter();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [toggleContact, { toggle: toggleContactModal }] = useToggle();
 
   const handleReserveClick = () => {
     const isLogin = tryGetToken();
@@ -28,6 +93,10 @@ export default function MainPage() {
     }
   };
 
+  const handleContactClick = () => {
+    toggleContactModal();
+  };
+
   useRequest(getAnnouncement, {
     onSuccess: ({ data }) => {
       setAnnouncements(data);
@@ -36,6 +105,12 @@ export default function MainPage() {
 
   return (
     <>
+      <ContactModal
+        open={toggleContact}
+        onClose={() => {
+          toggleContactModal();
+        }}
+      />
       <Header />
       <Layout>
         <div
@@ -134,6 +209,7 @@ export default function MainPage() {
                 padding: "20px",
                 border: "1px solid",
               }}
+              onClick={handleContactClick}
             >
               聯絡我們
             </Button>
