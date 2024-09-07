@@ -16,6 +16,20 @@ export function setUserName(name: string) {
   window.localStorage.setItem("_username", name);
 }
 
+export function setUsuallyAddress(from: string, to: string) {
+  window.localStorage.setItem("_from", from);
+  window.localStorage.setItem("_to", to);
+}
+
+export function tryGetUsuallyAddress(): {
+  from: string | null;
+  to: string | null;
+} {
+  const from = window.localStorage.getItem("_from");
+  const to = window.localStorage.getItem("_to");
+  return { from, to };
+}
+
 export function removeToken() {
   delete axios.defaults.headers.common["Authorization"];
   window.localStorage.removeItem("_token");

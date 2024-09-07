@@ -11,10 +11,16 @@ import {
   Modal,
   Flex,
   Popconfirm,
+  AutoComplete,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { getAllCar, reserveCar } from "../../../api/api";
+import {
+  getAllCar,
+  reserveCar,
+  setUsuallyAddress,
+  tryGetUsuallyAddress,
+} from "../../../api/api";
 import { useForm } from "antd/lib/form/Form";
 import { CarOutlined, FlagOutlined, PushpinOutlined } from "@ant-design/icons";
 import { AvailableCarDto, CarType } from "../../../interface/reserve";
@@ -140,6 +146,8 @@ const ResultModal = ({
 export default function MainPage() {
   const [form] = useForm();
   const [availableCar, setAvailableCar] = useState<AvailableCarDto[]>([]);
+  const [fromOptions, setFromOptions] = useState<string>("");
+  const [toOptions, setToOptions] = useState<string>("");
   const [toggleResult, { toggle: toggleResultModal }] = useToggle();
 
   const disabledDate = (current: dayjs.Dayjs) => {
@@ -149,6 +157,13 @@ export default function MainPage() {
   const handleSearch = () => {
     form.validateFields().then((values) => {
       run(values);
+    });
+  };
+
+  const handleAddUsuallyAddress = () => {
+    form.validateFields().then(() => {
+      message.success("加入常用地址成功");
+      setUsuallyAddress(form.getFieldValue("from"), form.getFieldValue("to"));
     });
   };
 
@@ -162,6 +177,14 @@ export default function MainPage() {
       message.error("查詢失敗");
     },
   });
+
+  useEffect(() => {
+    const storedAddresses = tryGetUsuallyAddress();
+    if (storedAddresses.from && storedAddresses.to) {
+      setFromOptions(storedAddresses.from);
+      setToOptions(storedAddresses.to);
+    }
+  }, []);
 
   return (
     <>
@@ -228,14 +251,23 @@ export default function MainPage() {
                 marginLeft: "20px",
               }}
             >
-              <Input
-                style={{
-                  padding: "10px",
-                }}
-                prefix={<PushpinOutlined />}
-                placeholder={"請輸入出發地"}
-                className="custom-placeholder"
-              />
+              <AutoComplete
+                options={fromOptions ? [{ value: fromOptions }] : []}
+                filterOption={(inputValue, option) =>
+                  option!.value
+                    .toLowerCase()
+                    .indexOf(inputValue.toLowerCase()) !== -1
+                }
+              >
+                <Input
+                  style={{
+                    padding: "10px",
+                  }}
+                  prefix={<PushpinOutlined />}
+                  placeholder={"請輸入出發地"}
+                  className="custom-placeholder"
+                />
+              </AutoComplete>
             </Form.Item>
             <Form.Item
               className="fadeIn-animation"
@@ -251,15 +283,33 @@ export default function MainPage() {
                 marginLeft: "20px",
               }}
             >
-              <Input
-                style={{
-                  padding: "10px",
-                }}
-                prefix={<FlagOutlined />}
-                placeholder={"請輸入目的地"}
-                className="custom-placeholder"
-              />
+              <AutoComplete
+                options={toOptions ? [{ value: toOptions }] : []}
+                filterOption={(inputValue, option) =>
+                  option!.value
+                    .toLowerCase()
+                    .indexOf(inputValue.toLowerCase()) !== -1
+                }
+              >
+                <Input
+                  style={{
+                    padding: "10px",
+                  }}
+                  prefix={<FlagOutlined />}
+                  placeholder={"請輸入目的地"}
+                  className="custom-placeholder"
+                />
+              </AutoComplete>
             </Form.Item>
+            <Flex justify="end" style={{ width: "90%", marginLeft: "20px" }}>
+              <Button
+                type="link"
+                style={{ textAlign: "right", marginTop: "10px", padding: 0 }}
+                onClick={handleAddUsuallyAddress}
+              >
+                加入常用地址
+              </Button>
+            </Flex>
             <Form.Item
               className="fadeIn-animation"
               name="carType"
