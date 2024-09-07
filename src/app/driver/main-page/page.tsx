@@ -149,8 +149,7 @@ export default function DriverMainPage() {
 
   useEffect(() => {
     if (currentOrder.length > 0) {
-      const items =
-        document.querySelectorAll<HTMLElement>(".fadeIn-animation");
+      const items = document.querySelectorAll<HTMLElement>(".fadeIn-animation");
       items.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.1}s`;
       });
@@ -158,11 +157,18 @@ export default function DriverMainPage() {
   }, [currentOrder]);
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     const token = window.localStorage.getItem("_token") as string;
     if (token) {
       setToken(token);
-      run(token);
+      timer = setInterval(() => {
+        run(token);
+      }, 1000);
     }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
   }, []);
 
   return (

@@ -1,16 +1,22 @@
 import { UnorderedListOutlined } from "@ant-design/icons";
-import { useToggle } from "ahooks";
-import { Button, Col, Flex, message, Modal, Row } from "antd";
+import { useRequest, useToggle } from "ahooks";
+import { Badge, Button, Col, Flex, message, Modal, Row } from "antd";
 import { useRouter } from "next/navigation";
-import { removeToken, tryGetName, tryGetToken } from "../../../api/api";
+import {
+  getDriverTicket,
+  removeToken,
+  tryGetName,
+  tryGetToken,
+} from "../../../api/api";
 import { useEffect, useState } from "react";
 
 interface MenuModalProps {
   open: boolean;
   onClose: () => void;
+  orderCount: number;
 }
 
-const MenuModal = ({ open, onClose }: MenuModalProps) => {
+const MenuModal = ({ open, onClose, orderCount }: MenuModalProps) => {
   const router = useRouter();
 
   const handleMainPageClick = () => {
@@ -37,9 +43,16 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
       title={<span style={{ fontSize: "1.2rem" }}>選單</span>}
       footer={[<></>]}
     >
-      <p className="menu-item" onClick={handleMainPageClick}>
-        訂單
-      </p>
+      <div className="menu-item">
+        <Badge count={orderCount}>
+          <p
+            style={{ fontSize: "1.2rem", fontWeight: "bolder" }}
+            onClick={handleMainPageClick}
+          >
+            訂單
+          </p>
+        </Badge>
+      </div>
       <p className="menu-item" onClick={handleHistoryClick}>
         歷史訂單
       </p>
@@ -52,8 +65,9 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
 
 const DriverHeader = () => {
   const router = useRouter();
-  const [toggleMenu, { toggle: toggleMenuModal }] = useToggle();
   const [isLogin, setIsLogin] = useState(false);
+  const [orderCount, setOrderCount] = useState<number>(0);
+  const [toggleMenu, { toggle: toggleMenuModal }] = useToggle();
 
   const handleOpenMenu = () => {
     toggleMenuModal();
@@ -63,8 +77,26 @@ const DriverHeader = () => {
     router.push("/driver/login");
   };
 
+  const { run } = useRequest(getDriverTicket, {
+    manual: true,
+    onSuccess: ({ data }) => {
+      setOrderCount(data.length);
+    },
+  });
+
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     setIsLogin(tryGetToken());
+    const token = window.localStorage.getItem("_token") as string;
+    if (token) {
+      timer = setInterval(() => {
+        run(token);
+      }, 1000);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
   }, []);
 
   return (
@@ -74,6 +106,7 @@ const DriverHeader = () => {
         onClose={() => {
           toggleMenuModal();
         }}
+        orderCount={orderCount}
       />
       <Row
         style={{
@@ -92,9 +125,11 @@ const DriverHeader = () => {
             style={{ width: "100%", height: "100%" }}
             onClick={handleOpenMenu}
           >
-            <UnorderedListOutlined
-              style={{ color: "#5bb3c4", fontSize: "1.5rem" }}
-            />
+            <Badge count={orderCount}>
+              <UnorderedListOutlined
+                style={{ color: "#5bb3c4", fontSize: "1.5rem" }}
+              />
+            </Badge>
           </Flex>
         </Col>
         <Col span={16}>
