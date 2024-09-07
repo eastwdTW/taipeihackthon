@@ -7,12 +7,12 @@ import {
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { regist } from "../../../api/api";
 
-export default function Login() {
+export default function Regist() {
   const [form] = Form.useForm();
   const router = useRouter();
 

@@ -1,18 +1,13 @@
 "use client";
 import { Button, Card, Col, Flex, Form, Input, message, Row } from "antd";
 import { useForm } from "antd/lib/form/Form";
-import {
-  EyeInvisibleOutlined,
-  EyeTwoTone,
-  MailOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import React, { useState } from "react";
+import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { forgetPassword } from "../../../api/api";
 
-export default function Login() {
+export default function ForgetPassword() {
   const router = useRouter();
   const [form] = useForm();
 
