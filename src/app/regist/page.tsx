@@ -64,6 +64,7 @@ export default function Regist() {
     manual: true,
     onSuccess: () => {
       message.success("註冊成功");
+      router.push("/login");
     },
     onError: () => {
       message.error("註冊失敗");
@@ -83,7 +84,11 @@ export default function Regist() {
             color: "#fff",
           },
         }}
-        style={{ width: "80%", border: "2px solid #5bb3c4", borderRadius: "10px" }}
+        style={{
+          width: "80%",
+          border: "2px solid #5bb3c4",
+          borderRadius: "10px",
+        }}
         title={<span>台北市復康巴士 - 註冊</span>}
       >
         <Row>
@@ -209,7 +214,7 @@ export default function Regist() {
               >
                 <Upload
                   listType="picture"
-                  defaultFileList={fileList}
+                  fileList={fileList}
                   onChange={handleFileUpload}
                 >
                   <Button
