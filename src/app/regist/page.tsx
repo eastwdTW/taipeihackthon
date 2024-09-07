@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { regist } from "../../../api/api";
 import { encryptWithPublicKey } from "../../../utils/util";
+import { AxiosError } from "axios";
 
 export default function Regist() {
   const [form] = Form.useForm();
@@ -43,7 +44,7 @@ export default function Regist() {
       const formData = new FormData();
 
       fileList.map((file: any) => {
-        formData.append("file", file.originFileObj);
+        formData.append("handicapFilePath", file.originFileObj);
       });
 
       Object.keys(otherFields).map((fieldName) => {
@@ -66,8 +67,18 @@ export default function Regist() {
       message.success("註冊成功");
       router.push("/login");
     },
-    onError: () => {
-      message.error("註冊失敗");
+    onError: (error) => {
+      const axiosError = error as AxiosError;
+      let errorMessage = "";
+      if (axiosError.response?.status === 409) {
+        errorMessage = "帳號已存在";
+      } else if (axiosError.response?.status === 400) {
+        errorMessage = "缺少欄位";
+      } else if (axiosError.response?.status === 500) {
+        errorMessage = "伺服器發生錯誤";
+      }
+
+      message.error(`註冊失敗：${errorMessage}`);
     },
   });
 
@@ -236,11 +247,13 @@ export default function Regist() {
                 >
                   返回登入
                 </Button>
-                <Button style={{
-                  backgroundColor: "#5bb3c4",
-                  color: "#fff"
-                }}
-                  onClick={handleRegister}>
+                <Button
+                  style={{
+                    backgroundColor: "#5bb3c4",
+                    color: "#fff",
+                  }}
+                  onClick={handleRegister}
+                >
                   註冊
                 </Button>
               </div>

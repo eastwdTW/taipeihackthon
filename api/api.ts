@@ -26,7 +26,7 @@ export function tryGetToken(): boolean {
 }
 
 export const regist = (registDto: FormData) =>
-  axios.post("", registDto); /* /api/regist */
+  axios.post("/api/user/regist", registDto);
 
 export const login = (loginDto: LoginDto) =>
   axios.post("", loginDto); /* /api/login */
