@@ -28,7 +28,7 @@ const Header = () => {
         width: "100%",
         color: "#000",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-        zIndex: 999,
+        position: "sticky",
       }}
     >
       <Col span={4}>
