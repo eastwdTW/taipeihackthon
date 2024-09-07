@@ -8,6 +8,7 @@ import {
   Modal,
   Popconfirm,
   message,
+  Empty,
 } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -217,53 +218,57 @@ export default function DriverMainPage() {
               overflowX: "hidden",
             }}
           >
-            {currentOrder.map((order) => {
-              return (
-                <div
-                  className="fadeIn-animation"
-                  key={order.id}
-                  onClick={() => {
-                    setSelectOrder(order);
-                    toggleDetailModal();
-                  }}
-                >
-                  <Row
-                    gutter={16}
-                    style={{ marginTop: "10px", marginBottom: "10px" }}
+            {currentOrder.length === 0 ? (
+              <Empty description={"無資料"} />
+            ) : (
+              currentOrder.map((order) => {
+                return (
+                  <div
+                    className="fadeIn-animation"
+                    key={order.id}
+                    onClick={() => {
+                      setSelectOrder(order);
+                      toggleDetailModal();
+                    }}
                   >
-                    <Col span={10}>
-                      <span
-                        style={{
-                          color: "#000",
-                          fontSize: "1rem",
-                          padding: "0px 20px",
-                        }}
-                      >
-                        {dayjs(order.startDate).format("YYYY-MM-DD")}
-                      </span>
-                    </Col>
-                    <Col span={14}>
-                      <span
-                        style={{
-                          width: "100%",
-                          color: "#000",
-                          fontSize: "1.2rem",
-                          padding: "0px 20px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          display: "block",
-                          textOverflow: "ellipsis",
-                          textAlign: "right",
-                        }}
-                      >
-                        {`從 ${order.from} 出發`}
-                      </span>
-                    </Col>
-                  </Row>
-                  <hr />
-                </div>
-              );
-            })}
+                    <Row
+                      gutter={16}
+                      style={{ marginTop: "10px", marginBottom: "10px" }}
+                    >
+                      <Col span={10}>
+                        <span
+                          style={{
+                            color: "#000",
+                            fontSize: "1rem",
+                            padding: "0px 20px",
+                          }}
+                        >
+                          {dayjs(order.startDate).format("YYYY-MM-DD")}
+                        </span>
+                      </Col>
+                      <Col span={14}>
+                        <span
+                          style={{
+                            width: "100%",
+                            color: "#000",
+                            fontSize: "1.2rem",
+                            padding: "0px 20px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            display: "block",
+                            textOverflow: "ellipsis",
+                            textAlign: "right",
+                          }}
+                        >
+                          {`從 ${order.from} 出發`}
+                        </span>
+                      </Col>
+                    </Row>
+                    <hr />
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </Layout>

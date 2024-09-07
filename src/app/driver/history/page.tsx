@@ -1,5 +1,5 @@
 "use client";
-import { Layout, Button, Row, Col, Flex, Modal } from "antd";
+import { Layout, Button, Row, Col, Flex, Modal, Empty } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Header from "../header";
@@ -140,8 +140,7 @@ export default function History() {
 
   useEffect(() => {
     if (historyTicket.length > 0) {
-      const items =
-        document.querySelectorAll<HTMLElement>(".fadeIn-animation");
+      const items = document.querySelectorAll<HTMLElement>(".fadeIn-animation");
       items.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.1}s`;
       });
@@ -197,53 +196,57 @@ export default function History() {
               overflowX: "hidden",
             }}
           >
-            {historyTicket.map((ticket) => {
-              return (
-                <div
-                  className="fadeIn-animation"
-                  key={ticket.id}
-                  onClick={() => {
-                    setSelectTicket(ticket);
-                    toggleDetailModal();
-                  }}
-                >
-                  <Row
-                    gutter={16}
-                    style={{ marginTop: "10px", marginBottom: "10px" }}
+            {historyTicket.length === 0 ? (
+              <Empty description={"無資料"} />
+            ) : (
+              historyTicket.map((ticket) => {
+                return (
+                  <div
+                    className="fadeIn-animation"
+                    key={ticket.id}
+                    onClick={() => {
+                      setSelectTicket(ticket);
+                      toggleDetailModal();
+                    }}
                   >
-                    <Col span={10}>
-                      <span
-                        style={{
-                          color: "#000",
-                          fontSize: "1rem",
-                          padding: "0px 20px",
-                        }}
-                      >
-                        {dayjs(ticket.startDate).format("YYYY-MM-DD")}
-                      </span>
-                    </Col>
-                    <Col span={14}>
-                      <span
-                        style={{
-                          width: "100%",
-                          color: "#000",
-                          fontSize: "1.2rem",
-                          padding: "0px 20px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          display: "block",
-                          textOverflow: "ellipsis",
-                          textAlign: "right",
-                        }}
-                      >
-                        {`從 ${ticket.from} 出發`}
-                      </span>
-                    </Col>
-                  </Row>
-                  <hr />
-                </div>
-              );
-            })}
+                    <Row
+                      gutter={16}
+                      style={{ marginTop: "10px", marginBottom: "10px" }}
+                    >
+                      <Col span={10}>
+                        <span
+                          style={{
+                            color: "#000",
+                            fontSize: "1rem",
+                            padding: "0px 20px",
+                          }}
+                        >
+                          {dayjs(ticket.startDate).format("YYYY-MM-DD")}
+                        </span>
+                      </Col>
+                      <Col span={14}>
+                        <span
+                          style={{
+                            width: "100%",
+                            color: "#000",
+                            fontSize: "1.2rem",
+                            padding: "0px 20px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            display: "block",
+                            textOverflow: "ellipsis",
+                            textAlign: "right",
+                          }}
+                        >
+                          {`從 ${ticket.from} 出發`}
+                        </span>
+                      </Col>
+                    </Row>
+                    <hr />
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </Layout>
