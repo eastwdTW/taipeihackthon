@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { ForgetPasswordDto, LoginDto } from "../interface/member";
+import { GetAllCar, ReserveCarDto } from "../interface/reserve";
 
 export const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_HOST,
@@ -32,3 +33,9 @@ export const login = (loginDto: LoginDto) =>
 
 export const forgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
   axios.post("", forgetPasswordDto); /* /api/forget-password */
+
+export const getAllCar = (query: GetAllCar) =>
+  axios.get("" /* /api/available/car  */, { params: query });
+
+export const reserveCar = (reserveCarDto: ReserveCarDto) =>
+  axios.post("" /* /api/select/car  */, reserveCarDto);

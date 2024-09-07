@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  font-family: '微軟正黑體';
+  font-family: "微軟正黑體";
 }
 
 :root {
@@ -28,4 +28,90 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.reserve-animation {
+  display: inline-block;
+  animation: slideInFromLeft 1s ease-out;
+}
+
+.custom-placeholder > .ant-picker-input > input::placeholder {
+  color: #555;
+}
+
+.custom-placeholder > .ant-select-selector > .ant-select-selection-placeholder {
+  color: #555;
+}
+
+.custom-placeholder input::placeholder {
+  color: #555;
+}
+
+.select-car-highlight {
+  padding: 10px 0px;
+  border: 2px solid #000;
+  border-radius: 5px;
+}
+
+.car-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.box {
+  width: 100%;
+  place-content: center;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-shadow: none;
+  --border-angle: 0turn;
+  --main-bg: conic-gradient(
+    from var(--border-angle),
+    #fff,
+    #fff 5%,
+    #fff 60%,
+    #fff 95%
+  );
+
+  border: solid 5px transparent;
+  border-radius: 10px;
+  --gradient-border: conic-gradient(
+    from var(--border-angle),
+    transparent 25%,
+    #fff,
+    #5bb3c4 99%,
+    transparent
+  );
+
+  background: var(--main-bg) padding-box, var(--gradient-border) border-box;
+
+  background-position: center center;
+
+  animation: bg-spin 3s linear infinite;
+}
+
+@keyframes bg-spin {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
 }
