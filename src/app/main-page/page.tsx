@@ -3,6 +3,8 @@ import { UnorderedListOutlined } from "@ant-design/icons";
 import { Layout, Image, Button, Row, Col, Flex } from "antd";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { tryGetToken } from "../../../api/api";
+import { useRouter } from "next/navigation";
 
 const { Footer } = Layout;
 
@@ -14,6 +16,7 @@ interface Announcement {
 }
 
 export default function MainPage() {
+  const router = useRouter();
   const [announcements, setAnnouncements] = useState<Announcement[]>([
     {
       id: 1,
@@ -70,6 +73,16 @@ export default function MainPage() {
       date: dayjs().format("YYYY/MM/DD"),
     },
   ]);
+
+  const handleReserveClick = () => {
+    const isLogin = tryGetToken();
+
+    if (isLogin) {
+      router.push("/reserve");
+    } else {
+      router.push("/login");
+    }
+  };
 
   return (
     <Layout>
@@ -208,6 +221,7 @@ export default function MainPage() {
               backgroundColor: "#5bb3c4",
               color: "#fff",
             }}
+            onClick={handleReserveClick}
           >
             立即預約
           </Button>
