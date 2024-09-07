@@ -5,7 +5,8 @@ import dayjs from "dayjs";
 import Footer from "../footer";
 import Header from "../header";
 import { CarType } from "../../../interface/reserve";
-import { useToggle } from "ahooks";
+import { useRequest, useToggle } from "ahooks";
+import { getCustomerHistory } from "../../../api/api";
 
 interface HistoryTicket {
   id: number;
@@ -125,175 +126,33 @@ const DetailModal = ({ open, onClose, detail }: DetailModalProps) => {
 };
 
 export default function History() {
-  const [historyTicket, setHistoryTicket] = useState<HistoryTicket[]>([
-    {
-      id: 1,
-      startDate: "2024-09-01",
-      endDate: "2024-09-05",
-      from: "New York",
-      to: "Los Angeles",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "John Doe",
-        plateNumber: "ABC1234",
-      },
-    },
-    {
-      id: 2,
-      startDate: "2024-08-15",
-      endDate: "2024-08-20",
-      from: "Miami",
-      to: "Orlando",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Jane Smith",
-        plateNumber: "XYZ9876",
-      },
-    },
-    {
-      id: 3,
-      startDate: "2024-07-10",
-      endDate: "2024-07-12",
-      from: "San Francisco",
-      to: "Las Vegas",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "James Brown",
-        plateNumber: "DEF4567",
-      },
-    },
-    {
-      id: 4,
-      startDate: "2024-06-25",
-      endDate: "2024-06-30",
-      from: "Seattle",
-      to: "Portland",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Emma Green",
-        plateNumber: "GHI7890",
-      },
-    },
-    {
-      id: 5,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-    {
-      id: 6,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-    {
-      id: 7,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-    {
-      id: 8,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-    {
-      id: 9,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-    {
-      id: 10,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-    {
-      id: 11,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-    {
-      id: 12,
-      startDate: "2024-09-03",
-      endDate: "2024-09-07",
-      from: "Dallas",
-      to: "Houston",
-      carType: CarType["小型復康巴士"],
-      price: 100,
-      driver: {
-        name: "Mike Johnson",
-        plateNumber: "JKL1235",
-      },
-    },
-  ]);
+  const [historyTicket, setHistoryTicket] = useState<HistoryTicket[]>([]);
 
   const [selectTicket, setSelectTicket] = useState<HistoryTicket>(
     {} as HistoryTicket
   );
   const [toggleDetail, { toggle: toggleDetailModal }] = useToggle();
 
+  const { run } = useRequest(getCustomerHistory, {
+    manual: true,
+    onSuccess: ({ data }) => {
+      setHistoryTicket(data);
+    },
+  });
+
   useEffect(() => {
-    const items = document.querySelectorAll<HTMLElement>(".history-animation");
-    items.forEach((item, index) => {
-      item.style.animationDelay = `${index * 0.1}s`;
-    });
+    if (historyTicket.length > 0) {
+      const items =
+        document.querySelectorAll<HTMLElement>(".history-animation");
+      items.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.1}s`;
+      });
+    }
+  }, [historyTicket]);
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("_token") as string;
+    if (token) run(token);
   }, []);
 
   return (
