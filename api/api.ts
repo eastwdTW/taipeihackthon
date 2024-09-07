@@ -34,6 +34,15 @@ export const login = (loginDto: LoginDto) =>
 export const forgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
   axios.post("", forgetPasswordDto); /* /api/forget-password */
 
+export const driverLogin = (loginDto: LoginDto) =>
+  axios.post("", loginDto); /* /api/driver/login */
+
+export const driverRegist = (registDto: FormData) =>
+  axios.post("", registDto); /* /api/driver/regist */
+
+export const driverForgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
+  axios.post("", forgetPasswordDto); /* /api/driver/forget-password */
+
 export const getAllCar = (query: GetAllCar) =>
   axios.get("" /* /api/available/car  */, { params: query });
 
