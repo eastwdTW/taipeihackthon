@@ -2,8 +2,6 @@
 import { Layout, Button, Row, Col, Flex, Modal } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { tryGetToken } from "../../../api/api";
-import { useRouter } from "next/navigation";
 import Footer from "../footer";
 import Header from "../header";
 import { CarType } from "../../../interface/reserve";

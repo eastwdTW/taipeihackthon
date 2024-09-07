@@ -2,7 +2,7 @@ import { UnorderedListOutlined } from "@ant-design/icons";
 import { useToggle } from "ahooks";
 import { Button, Col, Flex, message, Modal, Row } from "antd";
 import { useRouter } from "next/navigation";
-import { removeToken } from "../../api/api";
+import { removeToken } from "../../../api/api";
 
 interface MenuModalProps {
   open: boolean;
@@ -13,24 +13,19 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
   const router = useRouter();
 
   const handleMainPageClick = () => {
-    router.push("/main-page");
-    onClose();
-  };
-
-  const handleReserveClick = () => {
-    router.push("/reserve");
+    router.push("/driver/main-page");
     onClose();
   };
 
   const handleHistoryClick = () => {
-    router.push("/history");
+    router.push("/driver/history");
     onClose();
   };
 
   const handleLogoutClick = () => {
     removeToken();
     message.success("登出成功");
-    router.push("/main-page");
+    router.push("/driver/login");
     onClose();
   };
 
@@ -42,10 +37,7 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
       footer={[<></>]}
     >
       <p className="menu-item" onClick={handleMainPageClick}>
-        首頁
-      </p>
-      <p className="menu-item" onClick={handleReserveClick}>
-        預約復康巴士
+        訂單
       </p>
       <p className="menu-item" onClick={handleHistoryClick}>
         歷史訂單
@@ -57,7 +49,7 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
   );
 };
 
-const Header = () => {
+const DriverHeader = () => {
   const [toggleMenu, { toggle: toggleMenuModal }] = useToggle();
 
   const handleOpenMenu = () => {
@@ -128,4 +120,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default DriverHeader;
