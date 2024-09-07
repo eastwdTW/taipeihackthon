@@ -1,12 +1,21 @@
 "use client";
-import { Layout, Button, Row, Col, Flex, Modal } from "antd";
+import {
+  Layout,
+  Button,
+  Row,
+  Col,
+  Flex,
+  Modal,
+  Popconfirm,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useRequest, useToggle } from "ahooks";
 import { DriverCurrentOrder } from "../../../../interface/driver";
 import Footer from "@/app/footer";
 import DriverHeader from "../header";
-import { getDriverTicket } from "../../../../api/api";
+import { driverArriveDestination, getDriverTicket } from "../../../../api/api";
 
 interface DetailModalProps {
   open: boolean;
@@ -15,11 +24,37 @@ interface DetailModalProps {
 }
 
 const DetailModal = ({ open, onClose, detail }: DetailModalProps) => {
+  const { run } = useRequest(driverArriveDestination, {
+    manual: true,
+    onSuccess: () => {
+      message.success("已成功完成訂單");
+      onClose();
+    },
+    onError: () => {
+      message.error("操作訂單失敗");
+    },
+  });
+
+  const handleConfirm = () => {
+    run(detail.id, detail.driverId);
+  };
+
   return (
     <Modal
       open={open}
       onCancel={onClose}
-      footer={[<Button onClick={onClose}>關閉</Button>]}
+      footer={[
+        <Button onClick={onClose}>關閉</Button>,
+        <Popconfirm
+          title="最後確認"
+          description="確認已抵達目的地?"
+          onConfirm={handleConfirm}
+          okText="確定"
+          cancelText="返回"
+        >
+          <Button type="primary">已抵達目的地</Button>
+        </Popconfirm>,
+      ]}
       title="詳細內容"
     >
       <Flex
@@ -98,8 +133,8 @@ const DetailModal = ({ open, onClose, detail }: DetailModalProps) => {
 };
 
 export default function DriverMainPage() {
+  const [token, setToken] = useState<string>("");
   const [currentOrder, setCurrentOrder] = useState<DriverCurrentOrder[]>([]);
-
   const [selectOrder, setSelectOrder] = useState<DriverCurrentOrder>(
     {} as DriverCurrentOrder
   );
@@ -124,7 +159,10 @@ export default function DriverMainPage() {
 
   useEffect(() => {
     const token = window.localStorage.getItem("_token") as string;
-    if (token) run(token);
+    if (token) {
+      setToken(token);
+      run(token);
+    }
   }, []);
 
   return (
@@ -133,6 +171,7 @@ export default function DriverMainPage() {
         open={toggleDetail}
         onClose={() => {
           toggleDetailModal();
+          run(token);
         }}
         detail={selectOrder}
       />

@@ -88,6 +88,17 @@ export const driverForgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
     },
   });
 
+export const driverArriveDestination = (orderId: string, driverId: string) =>
+  axios.post(
+    "/api/driver/arrive-destination",
+    qs.stringify({ orderId, driverId }),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
 export const getAllCar = (query: GetAllCar) =>
   axios.get("/api/available/car", { params: query });
 
