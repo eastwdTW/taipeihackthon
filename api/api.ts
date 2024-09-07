@@ -62,6 +62,9 @@ export const getCustomerHistory = (customerId: string) =>
 export const getDriverTicket = (driverId: string) =>
   axios.get("/api/driver/ticket", { params: { driverId } });
 
+export const getDriverHistory = (driverId: string) =>
+  axios.get("/api/driver/history", { params: { driverId } });
+
 export const getAnnouncement = () => axios.get("/api/announcement");
 
 export const driverLogin = (loginDto: LoginDto) =>

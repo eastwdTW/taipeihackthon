@@ -2,7 +2,8 @@ import { UnorderedListOutlined } from "@ant-design/icons";
 import { useToggle } from "ahooks";
 import { Button, Col, Flex, message, Modal, Row } from "antd";
 import { useRouter } from "next/navigation";
-import { removeToken } from "../../../api/api";
+import { removeToken, tryGetName, tryGetToken } from "../../../api/api";
+import { useEffect, useState } from "react";
 
 interface MenuModalProps {
   open: boolean;
@@ -51,10 +52,15 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
 
 const DriverHeader = () => {
   const [toggleMenu, { toggle: toggleMenuModal }] = useToggle();
+  const [isLogin, setIsLogin] = useState(false);
 
   const handleOpenMenu = () => {
     toggleMenuModal();
   };
+
+  useEffect(() => {
+    setIsLogin(tryGetToken());
+  }, []);
 
   return (
     <>
@@ -103,16 +109,20 @@ const DriverHeader = () => {
             align="center"
             style={{ width: "100%", height: "100%" }}
           >
-            <Button
-              style={{
-                backgroundColor: "#5bb3c4",
-                border: 0,
-                color: "#fff",
-                fontWeight: "bolder",
-              }}
-            >
-              登入
-            </Button>
+            {isLogin ? (
+              <span>Hi！{tryGetName()}</span>
+            ) : (
+              <Button
+                style={{
+                  backgroundColor: "#5bb3c4",
+                  border: 0,
+                  color: "#fff",
+                  fontWeight: "bolder",
+                }}
+              >
+                登入
+              </Button>
+            )}
           </Flex>
         </Col>
       </Row>
