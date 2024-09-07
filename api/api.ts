@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { ForgetPasswordDto, LoginDto } from "../interface/member";
 import { GetAllCar, ReserveCarDto } from "../interface/reserve";
+import qs from "qs";
 
 export const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_HOST,
@@ -29,7 +30,11 @@ export const regist = (registDto: FormData) =>
   axios.post("/api/user/regist", registDto);
 
 export const login = (loginDto: LoginDto) =>
-  axios.post("", loginDto); /* /api/login */
+  axios.post("/api/user/login", qs.stringify(loginDto), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
 
 export const forgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
   axios.post("", forgetPasswordDto); /* /api/forget-password */

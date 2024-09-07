@@ -6,11 +6,12 @@ import {
   EyeTwoTone,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
-import { login } from "../../../api/api";
+import { login, setToken } from "../../../api/api";
 import { encryptWithPublicKey } from "../../../utils/util";
+import { AxiosError } from "axios";
 
 export default function Login() {
   const router = useRouter();
@@ -34,11 +35,24 @@ export default function Login() {
 
   const { run } = useRequest(login, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
+      setToken(data.token);
       router.push("/main-page");
     },
-    onError: () => {
-      message.error("登入失敗");
+    onError: (error) => {
+      const axiosError = error as AxiosError;
+      let errorMessage = "";
+      if (axiosError.response?.status === 401) {
+        const data = axiosError.response?.data as { message: string };
+        if (data?.message === "User not found") {
+          errorMessage = "帳號錯誤";
+        } else {
+          errorMessage = "密碼錯誤";
+        }
+      } else if (axiosError.response?.status === 500) {
+        errorMessage = "伺服器發生錯誤";
+      }
+      message.error(`登入錯誤：${errorMessage}`);
     },
   });
 
@@ -109,12 +123,14 @@ export default function Login() {
                 <Button onClick={handleRegister} style={{ marginRight: "5px" }}>
                   註冊
                 </Button>
-                <Button style={{
-                  backgroundColor: "#5bb3c4",
-                  color: "#fff",
-                  border: "none",
-                }}
-                  onClick={handleLogin}>
+                <Button
+                  style={{
+                    backgroundColor: "#5bb3c4",
+                    color: "#fff",
+                    border: "none",
+                  }}
+                  onClick={handleLogin}
+                >
                   登入
                 </Button>
               </div>
