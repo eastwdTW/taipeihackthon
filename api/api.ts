@@ -59,6 +59,9 @@ export const forgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
 export const getCustomerHistory = (customerId: string) =>
   axios.get("/api/user/history", { params: { customerId } });
 
+export const getDriverTicket = (driverId: string) =>
+  axios.get("/api/driver/ticket", { params: { driverId } });
+
 export const getAnnouncement = () => axios.get("/api/announcement");
 
 export const driverLogin = (loginDto: LoginDto) =>

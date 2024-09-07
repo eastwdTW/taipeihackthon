@@ -2,10 +2,11 @@
 import { Layout, Button, Row, Col, Flex, Modal } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { useToggle } from "ahooks";
+import { useRequest, useToggle } from "ahooks";
 import { DriverCurrentOrder } from "../../../../interface/driver";
 import Footer from "@/app/footer";
 import DriverHeader from "../header";
+import { getDriverTicket } from "../../../../api/api";
 
 interface DetailModalProps {
   open: boolean;
@@ -97,69 +98,33 @@ const DetailModal = ({ open, onClose, detail }: DetailModalProps) => {
 };
 
 export default function DriverMainPage() {
-  const [currentOrder, setCurrentOrder] = useState<DriverCurrentOrder[]>([
-    {
-      id: 1,
-      customer: {
-        name: "John Doe",
-        phone: "+1234567890",
-      },
-      startDate: "2024-09-07T10:30:00",
-      from: "捷運公館站",
-      to: "台灣大學",
-    },
-    {
-      id: 2,
-      customer: {
-        name: "Jane Smith",
-        phone: "+1234567891",
-      },
-      startDate: "2024-09-07T12:00:00",
-      from: "捷運公館站",
-      to: "台灣大學",
-    },
-    {
-      id: 3,
-      customer: {
-        name: "Alice Johnson",
-        phone: "+1234567892",
-      },
-      startDate: "2024-09-07T14:15:00",
-      from: "捷運公館站",
-      to: "台灣大學",
-    },
-    {
-      id: 4,
-      customer: {
-        name: "Bob Williams",
-        phone: "+1234567893",
-      },
-      startDate: "2024-09-07T16:00:00",
-      from: "捷運公館站",
-      to: "台灣大學",
-    },
-    {
-      id: 5,
-      customer: {
-        name: "Catherine Lee",
-        phone: "+1234567894",
-      },
-      startDate: "2024-09-07T18:45:00",
-      from: "捷運公館站",
-      to: "台灣大學",
-    },
-  ]);
+  const [currentOrder, setCurrentOrder] = useState<DriverCurrentOrder[]>([]);
 
   const [selectOrder, setSelectOrder] = useState<DriverCurrentOrder>(
     {} as DriverCurrentOrder
   );
   const [toggleDetail, { toggle: toggleDetailModal }] = useToggle();
 
+  const { run } = useRequest(getDriverTicket, {
+    manual: true,
+    onSuccess: ({ data }) => {
+      setCurrentOrder(data);
+    },
+  });
+
   useEffect(() => {
-    const items = document.querySelectorAll<HTMLElement>(".history-animation");
-    items.forEach((item, index) => {
-      item.style.animationDelay = `${index * 0.1}s`;
-    });
+    if (currentOrder.length > 0) {
+      const items =
+        document.querySelectorAll<HTMLElement>(".history-animation");
+      items.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.1}s`;
+      });
+    }
+  }, [currentOrder]);
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("_token") as string;
+    if (token) run(token);
   }, []);
 
   return (

@@ -6,11 +6,11 @@ import {
   EyeTwoTone,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { encryptWithPublicKey } from "../../../../utils/util";
-import { driverLogin } from "../../../../api/api";
+import { driverLogin, setToken, setUserName } from "../../../../api/api";
 
 export default function DriverLogin() {
   const router = useRouter();
@@ -38,7 +38,9 @@ export default function DriverLogin() {
 
   const { run } = useRequest(driverLogin, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
+      setToken(data.token);
+      setUserName(data.name);
       router.push("/driver/main-page");
     },
     onError: () => {
