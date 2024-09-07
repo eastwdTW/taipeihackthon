@@ -122,3 +122,29 @@ body {
   text-align: center;
   line-height: 50px;
 }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.history-animation {
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.history-ticket-region {
+  .title {
+    font-size: 1rem;
+    font-weight: bolder;
+  }
+
+  .content {
+    font-size: 1.2rem;
+    font-weight: bolder;
+  }
+}
