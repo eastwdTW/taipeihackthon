@@ -141,7 +141,7 @@ export default function History() {
   useEffect(() => {
     if (historyTicket.length > 0) {
       const items =
-        document.querySelectorAll<HTMLElement>(".history-animation");
+        document.querySelectorAll<HTMLElement>(".fadeIn-animation");
       items.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.1}s`;
       });
@@ -200,7 +200,7 @@ export default function History() {
             {historyTicket.map((ticket) => {
               return (
                 <div
-                  className="history-animation"
+                  className="fadeIn-animation"
                   key={ticket.id}
                   onClick={() => {
                     setSelectTicket(ticket);

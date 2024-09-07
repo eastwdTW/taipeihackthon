@@ -51,11 +51,16 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
 };
 
 const DriverHeader = () => {
+  const router = useRouter();
   const [toggleMenu, { toggle: toggleMenuModal }] = useToggle();
   const [isLogin, setIsLogin] = useState(false);
 
   const handleOpenMenu = () => {
     toggleMenuModal();
+  };
+
+  const handleLogin = () => {
+    router.push("/driver/login");
   };
 
   useEffect(() => {
@@ -99,7 +104,7 @@ const DriverHeader = () => {
             style={{ width: "100%", height: "100%" }}
           >
             <span style={{ fontWeight: "bolder", fontSize: "1.5rem" }}>
-              台北市復康巴士
+              台北市復康巴士 - 司機
             </span>
           </Flex>
         </Col>
@@ -119,6 +124,7 @@ const DriverHeader = () => {
                   color: "#fff",
                   fontWeight: "bolder",
                 }}
+                onClick={handleLogin}
               >
                 登入
               </Button>

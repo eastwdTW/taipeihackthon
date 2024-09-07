@@ -105,7 +105,11 @@ const DetailModal = ({ open, onClose, detail }: DetailModalProps) => {
           抵達時間
         </p>
         <p className="content" style={{ margin: 0 }}>
-          {dayjs(detail.endDate).format("YYYY/MM/DD HH:mm")}
+          {detail.endDate ? (
+            dayjs(detail.endDate).format("YYYY/MM/DD HH:mm")
+          ) : (
+            <span style={{ color: "red" }}>尚未抵達</span>
+          )}
         </p>
       </Flex>
       <hr style={{ margin: "10px 0px" }} />
@@ -143,7 +147,7 @@ export default function History() {
   useEffect(() => {
     if (historyTicket.length > 0) {
       const items =
-        document.querySelectorAll<HTMLElement>(".history-animation");
+        document.querySelectorAll<HTMLElement>(".fadeIn-animation");
       items.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.1}s`;
       });
@@ -202,7 +206,7 @@ export default function History() {
             {historyTicket.map((ticket) => {
               return (
                 <div
-                  className="history-animation"
+                  className="fadeIn-animation"
                   key={ticket.id}
                   onClick={() => {
                     setSelectTicket(ticket);

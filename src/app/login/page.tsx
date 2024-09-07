@@ -12,6 +12,8 @@ import { useRequest } from "ahooks";
 import { login, setToken, setUserName } from "../../../api/api";
 import { encryptWithPublicKey } from "../../../utils/util";
 import { AxiosError } from "axios";
+import Header from "../header";
+import Footer from "../footer";
 
 export default function Login() {
   const router = useRouter();
@@ -62,98 +64,105 @@ export default function Login() {
   });
 
   return (
-    <Flex
-      justify={"center"}
-      align={"center"}
-      style={{ height: "100vh", backgroundColor: "#f0f0f0f0" }}
-    >
-      <Card
-        styles={{
-          header: {
-            backgroundColor: "#5bb3c4",
-            color: "#fff",
-          },
-        }}
-        style={{
-          width: "80%",
-          border: "2px solid #5bb3c4",
-          borderRadius: "10px",
-        }}
-        title={<span>台北市復康巴士 - 登入</span>}
+    <>
+      <Header />
+      <Flex
+        justify={"center"}
+        align={"center"}
+        style={{ height: "80vh", backgroundColor: "#f0f0f0f0" }}
       >
-        <Row>
-          <Col span={24}>
-            <Form form={form}>
-              <Form.Item
-                name="account"
-                rules={[
-                  {
-                    required: true,
-                    message: "請輸入帳號",
-                  },
-                ]}
-              >
-                <Input prefix={<UserOutlined />} placeholder={"請輸入帳號"} />
-              </Form.Item>
-              <Form.Item
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "請輸入密碼",
-                  },
-                ]}
-              >
-                <Input.Password
-                  placeholder="請輸入密碼"
-                  iconRender={(visible) =>
-                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                  }
-                />
-              </Form.Item>
-            </Form>
-          </Col>
-          <Col span={24}>
-            <Flex justify={"space-between"} align={"center"}>
-              <div>
+        <Card
+          styles={{
+            header: {
+              backgroundColor: "#5bb3c4",
+              color: "#fff",
+            },
+          }}
+          style={{
+            width: "80%",
+            border: "2px solid #5bb3c4",
+            borderRadius: "10px",
+          }}
+          title={<span>台北市復康巴士 - 登入</span>}
+        >
+          <Row>
+            <Col span={24}>
+              <Form form={form}>
+                <Form.Item
+                  name="account"
+                  rules={[
+                    {
+                      required: true,
+                      message: "請輸入帳號",
+                    },
+                  ]}
+                >
+                  <Input prefix={<UserOutlined />} placeholder={"請輸入帳號"} />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "請輸入密碼",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    placeholder="請輸入密碼"
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
+                  />
+                </Form.Item>
+              </Form>
+            </Col>
+            <Col span={24}>
+              <Flex justify={"space-between"} align={"center"}>
+                <div>
+                  <Button
+                    type={"link"}
+                    style={{ padding: 0 }}
+                    onClick={handleForgetPassword}
+                  >
+                    忘記密碼
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    onClick={handleRegister}
+                    style={{ marginRight: "5px" }}
+                  >
+                    註冊
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "#5bb3c4",
+                      color: "#fff",
+                      border: "none",
+                    }}
+                    onClick={handleLogin}
+                  >
+                    登入
+                  </Button>
+                </div>
+              </Flex>
+            </Col>
+            <Col span={24}>
+              <Flex justify={"end"} align={"center"}>
                 <Button
                   type={"link"}
                   style={{ padding: 0 }}
-                  onClick={handleForgetPassword}
+                  onClick={handleDriverLogin}
                 >
-                  忘記密碼
+                  我是司機，按我登入
                 </Button>
-              </div>
-              <div>
-                <Button onClick={handleRegister} style={{ marginRight: "5px" }}>
-                  註冊
-                </Button>
-                <Button
-                  style={{
-                    backgroundColor: "#5bb3c4",
-                    color: "#fff",
-                    border: "none",
-                  }}
-                  onClick={handleLogin}
-                >
-                  登入
-                </Button>
-              </div>
-            </Flex>
-          </Col>
-          <Col span={24}>
-            <Flex justify={"end"} align={"center"}>
-              <Button
-                type={"link"}
-                style={{ padding: 0 }}
-                onClick={handleDriverLogin}
-              >
-                我是司機，按我登入
-              </Button>
-            </Flex>
-          </Col>
-        </Row>
-      </Card>
-    </Flex>
+              </Flex>
+            </Col>
+          </Row>
+        </Card>
+      </Flex>
+      <Footer />
+    </>
   );
 }

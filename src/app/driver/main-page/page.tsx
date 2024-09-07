@@ -150,7 +150,7 @@ export default function DriverMainPage() {
   useEffect(() => {
     if (currentOrder.length > 0) {
       const items =
-        document.querySelectorAll<HTMLElement>(".history-animation");
+        document.querySelectorAll<HTMLElement>(".fadeIn-animation");
       items.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.1}s`;
       });
@@ -213,7 +213,7 @@ export default function DriverMainPage() {
             {currentOrder.map((order) => {
               return (
                 <div
-                  className="history-animation"
+                  className="fadeIn-animation"
                   key={order.id}
                   onClick={() => {
                     setSelectOrder(order);

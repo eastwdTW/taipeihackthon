@@ -213,6 +213,7 @@ export default function MainPage() {
             }}
           >
             <Form.Item
+              className="fadeIn-animation"
               name="from"
               rules={[
                 {
@@ -235,6 +236,7 @@ export default function MainPage() {
               />
             </Form.Item>
             <Form.Item
+              className="fadeIn-animation"
               name="to"
               rules={[
                 {
@@ -257,6 +259,7 @@ export default function MainPage() {
               />
             </Form.Item>
             <Form.Item
+              className="fadeIn-animation"
               name="carType"
               rules={[
                 {
@@ -286,6 +289,7 @@ export default function MainPage() {
               />
             </Form.Item>
             <Form.Item
+              className="fadeIn-animation"
               name="startDate"
               rules={[
                 {
@@ -312,6 +316,7 @@ export default function MainPage() {
             </Form.Item>
           </Form>
           <Button
+            className="fadeIn-animation"
             style={{
               backgroundColor: "#5bb3c4",
               color: "#fff",
