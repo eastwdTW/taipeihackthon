@@ -4,38 +4,36 @@ import { useForm } from "antd/lib/form/Form";
 import {
   EyeInvisibleOutlined,
   EyeTwoTone,
+  MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
-import { login } from "../../../api/api";
+import { forgetPassword } from "../../../api/api";
 
 export default function Login() {
   const router = useRouter();
   const [form] = useForm();
 
-  const handleForgetPassword = () => {
-    router.push("/forget-password");
-  };
-
-  const handleRegister = () => {
-    router.push("/regist");
-  };
-
   const handleLogin = () => {
+    router.push("/login");
+  };
+
+  const handleForgetPassword = () => {
     form.validateFields().then((values) => {
       run(values);
     });
   };
 
-  const { run } = useRequest(login, {
+  const { run } = useRequest(forgetPassword, {
     manual: true,
     onSuccess: () => {
-      router.push("/main-page");
+      message.success("已寄送重設密碼至您的信箱");
+      router.push("/login");
     },
     onError: () => {
-      message.error("登入失敗");
+      message.error("寄送重設密碼信件失敗");
     },
   });
 
@@ -53,7 +51,7 @@ export default function Login() {
           },
         }}
         style={{ width: "80%", border: "2px solid #000", borderRadius: "10px" }}
-        title={<span>台北市復康巴士 - 登入</span>}
+        title={<span>台北市復康巴士 - 忘記密碼</span>}
       >
         <Row>
           <Col span={24}>
@@ -63,47 +61,41 @@ export default function Login() {
                 rules={[
                   {
                     required: true,
-                    message: "請輸入帳號",
+                    message: "請輸入註冊帳號",
                   },
                 ]}
               >
-                <Input prefix={<UserOutlined />} placeholder={"請輸入帳號"} />
+                <Input
+                  prefix={<UserOutlined />}
+                  placeholder={"請輸入註冊帳號"}
+                />
               </Form.Item>
               <Form.Item
-                name="password"
+                name="email"
                 rules={[
                   {
                     required: true,
-                    message: "請輸入密碼",
+                    message: "請輸入註冊信箱",
                   },
+                  { type: "email", message: "信箱格式錯誤" },
                 ]}
               >
-                <Input.Password
-                  placeholder="請輸入密碼"
-                  iconRender={(visible) =>
-                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                  }
+                <Input
+                  type="mail"
+                  prefix={<MailOutlined />}
+                  placeholder={"請輸入註冊信箱"}
                 />
               </Form.Item>
             </Form>
           </Col>
           <Col span={24}>
-            <Flex justify={"space-between"} align={"center"}>
+            <Flex justify={"end"} align={"center"}>
               <div>
-                <Button
-                  type={"link"}
-                  style={{ padding: 0 }}
-                  onClick={handleForgetPassword}
-                >
-                  忘記密碼
+                <Button onClick={handleLogin} style={{ marginRight: "5px" }}>
+                  返回登入
                 </Button>
-              </div>
-              <div>
-                <Button onClick={handleRegister} style={{ marginRight: "5px" }}>
-                  註冊
-                </Button>
-                <Button type="primary" onClick={handleLogin}>
-                  登入
+                <Button type="primary" onClick={handleForgetPassword}>
+                  送出
                 </Button>
               </div>
             </Flex>
