@@ -2,7 +2,8 @@ import { UnorderedListOutlined } from "@ant-design/icons";
 import { useToggle } from "ahooks";
 import { Button, Col, Flex, message, Modal, Row } from "antd";
 import { useRouter } from "next/navigation";
-import { removeToken } from "../../api/api";
+import { removeToken, tryGetName, tryGetToken } from "../../api/api";
+import { useEffect, useState } from "react";
 
 interface MenuModalProps {
   open: boolean;
@@ -30,7 +31,7 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
   const handleLogoutClick = () => {
     removeToken();
     message.success("登出成功");
-    router.push("/main-page");
+    router.push("/login");
     onClose();
   };
 
@@ -58,11 +59,21 @@ const MenuModal = ({ open, onClose }: MenuModalProps) => {
 };
 
 const Header = () => {
+  const router = useRouter();
   const [toggleMenu, { toggle: toggleMenuModal }] = useToggle();
+  const [isLogin, setIsLogin] = useState(false);
 
   const handleOpenMenu = () => {
     toggleMenuModal();
   };
+
+  const handleRedirectLogin = () => {
+    router.push("/login");
+  };
+
+  useEffect(() => {
+    setIsLogin(tryGetToken());
+  }, []);
 
   return (
     <>
@@ -111,16 +122,21 @@ const Header = () => {
             align="center"
             style={{ width: "100%", height: "100%" }}
           >
-            <Button
-              style={{
-                backgroundColor: "#5bb3c4",
-                border: 0,
-                color: "#fff",
-                fontWeight: "bolder",
-              }}
-            >
-              登入
-            </Button>
+            {isLogin ? (
+              <span>Hi！{tryGetName()}</span>
+            ) : (
+              <Button
+                style={{
+                  backgroundColor: "#5bb3c4",
+                  border: 0,
+                  color: "#fff",
+                  fontWeight: "bolder",
+                }}
+                onClick={handleRedirectLogin}
+              >
+                登入
+              </Button>
+            )}
           </Flex>
         </Col>
       </Row>

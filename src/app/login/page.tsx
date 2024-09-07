@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
-import { login, setToken } from "../../../api/api";
+import { login, setToken, setUserName } from "../../../api/api";
 import { encryptWithPublicKey } from "../../../utils/util";
 import { AxiosError } from "axios";
 
@@ -37,6 +37,7 @@ export default function Login() {
     manual: true,
     onSuccess: ({ data }) => {
       setToken(data.token);
+      setUserName(data.name);
       router.push("/main-page");
     },
     onError: (error) => {

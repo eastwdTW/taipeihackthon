@@ -12,9 +12,14 @@ export function setToken(token: string) {
   window.localStorage.setItem("_token", token);
 }
 
+export function setUserName(name: string) {
+  window.localStorage.setItem("_username", name);
+}
+
 export function removeToken() {
   delete axios.defaults.headers.common["Authorization"];
   window.localStorage.removeItem("_token");
+  window.localStorage.removeItem("_username");
 }
 
 export function tryGetToken(): boolean {
@@ -24,6 +29,14 @@ export function tryGetToken(): boolean {
     return true;
   }
   return false;
+}
+
+export function tryGetName(): string {
+  const username = window.localStorage.getItem("_username");
+  if (username) {
+    return username;
+  }
+  return "";
 }
 
 export const regist = (registDto: FormData) =>
