@@ -108,3 +108,10 @@ export const reserveCar = (reserveCarDto: ReserveCarDto) =>
       "Content-Type": "application/x-www-form-urlencoded",
     },
   });
+
+export const sendFAQ = (question: string) =>
+  axios.post("/api/faq", qs.stringify({ question }), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });

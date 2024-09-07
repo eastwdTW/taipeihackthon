@@ -22,6 +22,7 @@ import { useRequest, useToggle } from "ahooks";
 import Footer from "../footer";
 import Header from "../header";
 import { useRouter } from "next/navigation";
+import ChatBot from "../../../component/chatbot";
 
 interface ResultModalProps {
   open: boolean;
@@ -164,6 +165,7 @@ export default function MainPage() {
 
   return (
     <>
+      <ChatBot />
       <Header />
       <Layout>
         <ResultModal

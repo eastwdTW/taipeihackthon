@@ -17,6 +17,7 @@ import Footer from "../footer";
 import Header from "../header";
 import { useRequest, useToggle } from "ahooks";
 import { useForm } from "antd/lib/form/Form";
+import ChatBot from "../../../component/chatbot";
 
 interface Announcement {
   id: number;
@@ -105,6 +106,7 @@ export default function MainPage() {
 
   return (
     <>
+      <ChatBot />
       <ContactModal
         open={toggleContact}
         onClose={() => {

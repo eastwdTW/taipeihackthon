@@ -148,3 +148,41 @@ body {
     font-weight: bolder;
   }
 }
+
+.message {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.message .text {
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.message .timestamp {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 5px;
+  align-self: flex-end;
+}
+
+.message .timestamp.received {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 5px;
+  align-self: flex-start;
+}
+
+.message.sent .text {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+}
+
+.message.received .text {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  align-self: flex-start;
+}

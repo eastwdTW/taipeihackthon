@@ -7,6 +7,7 @@ import Header from "../header";
 import { CarType } from "../../../interface/reserve";
 import { useRequest, useToggle } from "ahooks";
 import { getCustomerHistory } from "../../../api/api";
+import ChatBot from "../../../component/chatbot";
 
 interface HistoryTicket {
   id: number;
@@ -146,8 +147,7 @@ export default function History() {
 
   useEffect(() => {
     if (historyTicket.length > 0) {
-      const items =
-        document.querySelectorAll<HTMLElement>(".fadeIn-animation");
+      const items = document.querySelectorAll<HTMLElement>(".fadeIn-animation");
       items.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.1}s`;
       });
@@ -161,6 +161,7 @@ export default function History() {
 
   return (
     <>
+      <ChatBot />
       <DetailModal
         open={toggleDetail}
         onClose={() => {
