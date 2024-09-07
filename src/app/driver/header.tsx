@@ -89,6 +89,7 @@ const DriverHeader = () => {
     setIsLogin(tryGetToken());
     const token = window.localStorage.getItem("_token") as string;
     if (token) {
+      run(token);
       timer = setInterval(() => {
         run(token);
       }, 1000);

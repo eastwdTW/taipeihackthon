@@ -160,6 +160,7 @@ export default function DriverMainPage() {
     let timer: NodeJS.Timeout;
     const token = window.localStorage.getItem("_token") as string;
     if (token) {
+      run(token);
       setToken(token);
       timer = setInterval(() => {
         run(token);
