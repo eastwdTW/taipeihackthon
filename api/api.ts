@@ -56,6 +56,8 @@ export const forgetPassword = (forgetPasswordDto: ForgetPasswordDto) =>
     },
   });
 
+export const getAnnouncement = () => axios.get("/api/announcement");
+
 export const driverLogin = (loginDto: LoginDto) =>
   axios.post("", loginDto); /* /api/driver/login */
 

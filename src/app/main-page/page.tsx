@@ -1,11 +1,11 @@
 "use client";
-import { Layout, Image, Button, Row, Col, Flex } from "antd";
+import { Layout, Button, Row, Col, Flex } from "antd";
 import { useState } from "react";
-import dayjs from "dayjs";
-import { tryGetToken } from "../../../api/api";
+import { getAnnouncement, tryGetToken } from "../../../api/api";
 import { useRouter } from "next/navigation";
 import Footer from "../footer";
 import Header from "../header";
+import { useRequest } from "ahooks";
 
 interface Announcement {
   id: number;
@@ -16,62 +16,7 @@ interface Announcement {
 
 export default function MainPage() {
   const router = useRouter();
-  const [announcements, setAnnouncements] = useState<Announcement[]>([
-    {
-      id: 1,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 2,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 3,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 4,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 5,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 6,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 7,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 8,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-    {
-      id: 9,
-      title: "測試測試測試測試測試測試測試測試測試測試",
-      content: "測試測試測試測試測試測試測試測試測試測試",
-      date: dayjs().format("YYYY/MM/DD"),
-    },
-  ]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
   const handleReserveClick = () => {
     const isLogin = tryGetToken();
@@ -82,6 +27,12 @@ export default function MainPage() {
       router.push("/login");
     }
   };
+
+  useRequest(getAnnouncement, {
+    onSuccess: ({ data }) => {
+      setAnnouncements(data);
+    },
+  });
 
   return (
     <>
