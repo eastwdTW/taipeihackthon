@@ -79,11 +79,11 @@ export default function Regist() {
       <Card
         styles={{
           header: {
-            backgroundColor: "#000",
+            backgroundColor: "#5bb3c4",
             color: "#fff",
           },
         }}
-        style={{ width: "80%", border: "2px solid #000", borderRadius: "10px" }}
+        style={{ width: "80%", border: "2px solid #5bb3c4", borderRadius: "10px" }}
         title={<span>台北市復康巴士 - 註冊</span>}
       >
         <Row>
