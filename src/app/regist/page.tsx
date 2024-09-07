@@ -1,13 +1,26 @@
 "use client";
-import { Button, Card, Col, Flex, Form, Input, message, Row } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Flex,
+  Form,
+  Input,
+  message,
+  Row,
+  Upload,
+  UploadFile,
+} from "antd";
 import {
   EyeInvisibleOutlined,
   EyeTwoTone,
   MailOutlined,
   PhoneOutlined,
+  SolutionOutlined,
+  UploadOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRequest } from "ahooks";
 import { regist } from "../../../api/api";
@@ -16,14 +29,32 @@ export default function Regist() {
   const [form] = Form.useForm();
   const router = useRouter();
 
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
   const handleRedirectLogin = () => {
     router.push("/login");
   };
 
   const handleRegister = () => {
     form.validateFields().then((values) => {
-      run(values);
+      const { file, ...otherFields } = values;
+
+      const formData = new FormData();
+
+      fileList.map((file: any) => {
+        formData.append("file", file.originFileObj);
+      });
+
+      Object.keys(otherFields).map((fieldName) => {
+        formData.append(fieldName, values[fieldName]);
+      });
+
+      run(formData);
     });
+  };
+
+  const handleFileUpload = ({ fileList: currentFileList }: any) => {
+    setFileList(currentFileList);
   };
 
   const { run } = useRequest(regist, {
@@ -55,6 +86,20 @@ export default function Regist() {
         <Row>
           <Col span={24}>
             <Form form={form}>
+              <Form.Item
+                name="name"
+                rules={[
+                  {
+                    required: true,
+                    message: "請輸入名字",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<SolutionOutlined />}
+                  placeholder={"請輸入名字"}
+                />
+              </Form.Item>
               <Form.Item
                 name="account"
                 rules={[
@@ -145,6 +190,32 @@ export default function Regist() {
                 ]}
               >
                 <Input prefix={<PhoneOutlined />} placeholder={"請輸入手機"} />
+              </Form.Item>
+              <Form.Item
+                name="file"
+                rules={[
+                  {
+                    validator: () => {
+                      if (fileList.length === 0) {
+                        return Promise.reject("請上傳身心障礙證明");
+                      }
+                      return Promise.resolve("");
+                    },
+                  },
+                ]}
+              >
+                <Upload
+                  listType="picture"
+                  defaultFileList={fileList}
+                  onChange={handleFileUpload}
+                >
+                  <Button
+                    icon={<UploadOutlined />}
+                    disabled={fileList.length > 0}
+                  >
+                    上傳身心障礙證明
+                  </Button>
+                </Upload>
               </Form.Item>
             </Form>
           </Col>

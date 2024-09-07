@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { ForgetPasswordDto, LoginDto, RegistDto } from "../interface/member";
+import { ForgetPasswordDto, LoginDto } from "../interface/member";
 
 export const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_HOST,
@@ -24,7 +24,7 @@ export function tryGetToken(): boolean {
   return false;
 }
 
-export const regist = (registDto: RegistDto) =>
+export const regist = (registDto: FormData) =>
   axios.post("", registDto); /* /api/regist */
 
 export const login = (loginDto: LoginDto) =>
