@@ -237,10 +237,10 @@ export default function DriverRegist() {
                     const allUpperCase = value.toUpperCase();
 
                     form.setFieldsValue({
-                      plateNumber: allUpperCase,
+                      plate: allUpperCase,
                     });
 
-                    form.validateFields(["plateNumber"]);
+                    form.validateFields(["plate"]);
                   }}
                 />
               </Form.Item>
