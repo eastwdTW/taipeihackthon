@@ -115,3 +115,10 @@ body {
   inherits: true;
   initial-value: 0turn;
 }
+
+.menu-item {
+  font-weight: bolder;
+  font-size: 1.2rem;
+  text-align: center;
+  line-height: 50px;
+}

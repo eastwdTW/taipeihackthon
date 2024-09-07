@@ -20,6 +20,8 @@ import { useForm } from "antd/lib/form/Form";
 import { CarOutlined, FlagOutlined, PushpinOutlined } from "@ant-design/icons";
 import { AvailableCarDto, CarType } from "../../../interface/reserve";
 import { useRequest, useToggle } from "ahooks";
+import Footer from "../footer";
+import Header from "../header";
 
 interface ResultModalProps {
   open: boolean;
@@ -236,166 +238,170 @@ export default function MainPage() {
   });
 
   return (
-    <Layout>
-      <ResultModal
-        open={toggleResult}
-        onClose={() => {
-          toggleResultModal();
-        }}
-        availableCar={availableCar}
-        clientSelectCar={form.getFieldsValue() as ClientSelectCar}
-      />
-      <div
-        style={{
-          backgroundColor: "#fff",
-          height: "calc(100vh - 56px - 109px)",
-          paddingTop: "40px",
-        }}
-      >
-        <p
-          className="reserve-animation"
+    <>
+      <Header />
+      <Layout>
+        <ResultModal
+          open={toggleResult}
+          onClose={() => {
+            toggleResultModal();
+          }}
+          availableCar={availableCar}
+          clientSelectCar={form.getFieldsValue() as ClientSelectCar}
+        />
+        <div
           style={{
-            color: "#000",
-            fontWeight: "bolder",
-            fontSize: "2rem",
-            paddingLeft: "20px",
+            backgroundColor: "#fff",
+            height: "calc(100vh - 56px - 109px)",
+            paddingTop: "40px",
           }}
         >
-          無障礙行，復康同行
-        </p>
-        <p
-          className="reserve-animation"
-          style={{
-            color: "#000",
-            fontWeight: "bolder",
-            fontSize: "1rem",
-            paddingLeft: "20px",
-          }}
-        >
-          預約搭乘，安心出發
-        </p>
-        <Form
-          form={form}
-          style={{
-            marginTop: "20px",
-          }}
-          initialValues={{
-            startDate: dayjs().add(10, "m"),
-          }}
-        >
-          <Form.Item
-            name="from"
-            rules={[
-              {
-                required: true,
-                message: "請輸入出發地",
-              },
-            ]}
+          <p
+            className="reserve-animation"
             style={{
-              width: "90%",
-              marginLeft: "20px",
+              color: "#000",
+              fontWeight: "bolder",
+              fontSize: "2rem",
+              paddingLeft: "20px",
             }}
           >
-            <Input
-              style={{
-                padding: "10px",
-              }}
-              prefix={<PushpinOutlined />}
-              placeholder={"請輸入出發地"}
-              className="custom-placeholder"
-            />
-          </Form.Item>
-          <Form.Item
-            name="to"
-            rules={[
-              {
-                required: true,
-                message: "請輸入目的地",
-              },
-            ]}
+            無障礙行，復康同行
+          </p>
+          <p
+            className="reserve-animation"
             style={{
-              width: "90%",
-              marginLeft: "20px",
+              color: "#000",
+              fontWeight: "bolder",
+              fontSize: "1rem",
+              paddingLeft: "20px",
             }}
           >
-            <Input
-              style={{
-                padding: "10px",
-              }}
-              prefix={<FlagOutlined />}
-              placeholder={"請輸入目的地"}
-              className="custom-placeholder"
-            />
-          </Form.Item>
-          <Form.Item
-            name="carType"
-            rules={[
-              {
-                required: true,
-                message: "請選擇車種",
-              },
-            ]}
+            預約搭乘，安心出發
+          </p>
+          <Form
+            form={form}
             style={{
-              width: "90%",
-              marginLeft: "20px",
+              marginTop: "20px",
+            }}
+            initialValues={{
+              startDate: dayjs().add(10, "m"),
             }}
           >
-            <Select
+            <Form.Item
+              name="from"
+              rules={[
+                {
+                  required: true,
+                  message: "請輸入出發地",
+                },
+              ]}
               style={{
-                height: "45px",
-                lineHeight: "45px",
+                width: "90%",
+                marginLeft: "20px",
               }}
-              suffixIcon={<CarOutlined />}
-              placeholder={"請輸入車種"}
-              className="custom-placeholder"
-              options={Object.keys(CarType).map((type) => {
-                return {
-                  value: type,
-                  label: type,
-                };
-              })}
-            />
-          </Form.Item>
-          <Form.Item
-            name="startDate"
-            rules={[
-              {
-                required: true,
-                message: "請輸入出發時間",
-              },
-            ]}
+            >
+              <Input
+                style={{
+                  padding: "10px",
+                }}
+                prefix={<PushpinOutlined />}
+                placeholder={"請輸入出發地"}
+                className="custom-placeholder"
+              />
+            </Form.Item>
+            <Form.Item
+              name="to"
+              rules={[
+                {
+                  required: true,
+                  message: "請輸入目的地",
+                },
+              ]}
+              style={{
+                width: "90%",
+                marginLeft: "20px",
+              }}
+            >
+              <Input
+                style={{
+                  padding: "10px",
+                }}
+                prefix={<FlagOutlined />}
+                placeholder={"請輸入目的地"}
+                className="custom-placeholder"
+              />
+            </Form.Item>
+            <Form.Item
+              name="carType"
+              rules={[
+                {
+                  required: true,
+                  message: "請選擇車種",
+                },
+              ]}
+              style={{
+                width: "90%",
+                marginLeft: "20px",
+              }}
+            >
+              <Select
+                style={{
+                  height: "45px",
+                  lineHeight: "45px",
+                }}
+                suffixIcon={<CarOutlined />}
+                placeholder={"請輸入車種"}
+                className="custom-placeholder"
+                options={Object.keys(CarType).map((type) => {
+                  return {
+                    value: type,
+                    label: type,
+                  };
+                })}
+              />
+            </Form.Item>
+            <Form.Item
+              name="startDate"
+              rules={[
+                {
+                  required: true,
+                  message: "請輸入出發時間",
+                },
+              ]}
+              style={{
+                width: "90%",
+                marginLeft: "20px",
+              }}
+            >
+              <DatePicker
+                style={{
+                  padding: "10px",
+                  width: "100%",
+                }}
+                placeholder={"請輸入出發時間"}
+                className="custom-placeholder"
+                showTime={{ format: "HH:mm" }}
+                format={"YYYY-MM-DD HH:mm"}
+                disabledDate={disabledDate}
+                disabledTime={disabledDateTime}
+              />
+            </Form.Item>
+          </Form>
+          <Button
             style={{
-              width: "90%",
+              backgroundColor: "#5bb3c4",
+              color: "#fff",
               marginLeft: "20px",
+              fontWeight: "bolder",
+              fontSize: "1rem",
             }}
+            onClick={handleSearch}
           >
-            <DatePicker
-              style={{
-                padding: "10px",
-                width: "100%",
-              }}
-              placeholder={"請輸入出發時間"}
-              className="custom-placeholder"
-              showTime={{ format: "HH:mm" }}
-              format={"YYYY-MM-DD HH:mm"}
-              disabledDate={disabledDate}
-              disabledTime={disabledDateTime}
-            />
-          </Form.Item>
-        </Form>
-        <Button
-          style={{
-            backgroundColor: "#5bb3c4",
-            color: "#fff",
-            marginLeft: "20px",
-            fontWeight: "bolder",
-            fontSize: "1rem",
-          }}
-          onClick={handleSearch}
-        >
-          查詢
-        </Button>
-      </div>
-    </Layout>
+            查詢
+          </Button>
+        </div>
+      </Layout>
+      <Footer />
+    </>
   );
 }
